@@ -1,6 +1,16 @@
 package model
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
+
+// Model general struct
+type Model struct {
+	ID        uint
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
 
 //DBCon dbcon
 var DBCon *sql.DB

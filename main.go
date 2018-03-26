@@ -17,6 +17,7 @@ func main() {
 	log.Printf("Server started on: http://localhost%s", os.Getenv("SERVER_PORT"))
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	http.HandleFunc("/", index)
+	http.HandleFunc("/create", create)
 	http.HandleFunc("/edit", edit)
 	http.HandleFunc("/detail", detail)
 	http.ListenAndServe(os.Getenv("SERVER_PORT"), nil)
