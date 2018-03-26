@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"go2-t2/model"
 	"html/template"
 	"net/http"
 )
@@ -10,8 +11,9 @@ type (
 )
 
 func (bc BlogController) Index(w http.ResponseWriter, r *http.Request) {
+	blogs := model.GetAllPosts()
 	tmpl := template.Must(template.ParseFiles("views/layout/header.html", "views/blogs/index.html", "views/layout/footer.html"))
-	tmpl.ExecuteTemplate(w, "index", nil)
+	tmpl.ExecuteTemplate(w, "index", blogs)
 }
 
 func (bc BlogController) Edit(w http.ResponseWriter, r *http.Request) {
