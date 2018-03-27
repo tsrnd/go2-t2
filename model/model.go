@@ -1,12 +1,15 @@
 package model
 
 import (
-	"database/sql"
 	"log"
+	"net/http"
+	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 //DBCon dbcon
-var DBCon *sql.DB
+var DBCon *gorm.DB
 var err error
 
 // Blog type struct
@@ -22,24 +25,28 @@ func checkErr(err error) {
 	}
 }
 
+// Model general struct
+type Model struct {
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
 //SetDatabase return DBCon
-func SetDatabase(database *sql.DB) {
+func SetDatabase(database *gorm.DB) {
 	DBCon = database
 }
 
 // GetAllPosts return all posts
 func GetAllPosts() []Blog {
-
-	rows, e := DBCon.Query(
-		"SELECT id, title, content FROM blogs ORDER BY id DESC;")
-	checkErr(e)
-
-	blogs := []Blog{}
-	for rows.Next() {
-		blg := Blog{}
-		rows.Scan(&blg.ID, &blg.Title, &blg.Content)
-		blogs = append(blogs, blg)
-	}
-
+	var blogs []Blog
+	DBCon.Select("id, title, content").Order("id desc, title").Find(&blogs)
 	return blogs
+}
+
+//Redirect redirect
+func Redirect(w http.ResponseWriter, r *http.Request) {
+	// remove/add not default ports from req.Host
+	target := "http://" + r.Host
+	http.Redirect(w, r, target, 301)
 }

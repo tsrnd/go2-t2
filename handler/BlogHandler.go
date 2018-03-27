@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"go2-t2/model"
 	"html/template"
 	"net/http"
 )
@@ -14,8 +15,9 @@ func getTemplate(str string) *template.Template {
 }
 
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
+	blogs := model.GetAllPosts()
 	tmpl := getTemplate("index.html")
-	tmpl.ExecuteTemplate(w, "index", nil)
+	tmpl.ExecuteTemplate(w, "index", blogs)
 }
 
 func (bh BlogHandler) Edit(w http.ResponseWriter, r *http.Request) {

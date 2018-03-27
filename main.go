@@ -9,12 +9,11 @@ import (
 	"net/http"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
 	fmt.Print("HELLO GOLANG")
-
 	log.Printf("Server started on: http://localhost%s", os.Getenv("SERVER_PORT"))
 
 	r := router.Route()
