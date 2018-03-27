@@ -1,11 +1,30 @@
 package model
 
-import "database/sql"
+import (
+	"net/http"
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
+
+// Model general struct
+type Model struct {
+	ID        uint `gorm:"primary_key"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
 
 //DBCon dbcon
-var DBCon *sql.DB
+var DBCon *gorm.DB
 
 //SetDatabase return DBCon
-func SetDatabase(database *sql.DB) {
+func SetDatabase(database *gorm.DB) {
 	DBCon = database
+}
+
+//Redirect redirect
+func Redirect(w http.ResponseWriter, r *http.Request) {
+	// remove/add not default ports from req.Host
+	target := "http://" + r.Host
+	http.Redirect(w, r, target, 301)
 }
