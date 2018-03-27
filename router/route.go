@@ -1,21 +1,23 @@
 package router
 
 import (
-	"go2-t2/handle/blog"
+	"go2-t2/handler"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 )
 
 //Route route
-func Route() *mux.Router {
-	var bh blog.BlogHandler
-	r := mux.NewRouter()
+func Route() *chi.Mux {
+	var bh handler.BlogHandler
+	r := chi.NewRouter()
 
-	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+	r.Method(http.MethodGet, "/public/*", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-	r.HandleFunc("/create", bh.Create).Methods("GET")
-	r.HandleFunc("/store", bh.Store).Methods("POST")
+	r.Get("/create", bh.Create)
+	r.Post("/store", bh.Store)
+	r.Get("/", bh.Index)
+	r.Get("/{id}/edit", bh.Edit)
 
 	return r
 }

@@ -1,18 +1,26 @@
-package blog
+package handler
 
 import (
+	"go2-t2/config"
 	"go2-t2/model"
-	"html/template"
 	"net/http"
 )
 
-//BlogHandler blog struct
-type BlogHandler struct {
+type BlogHandler struct{}
+
+func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
+	tmpl := config.GetTemplate("index.html")
+	tmpl.ExecuteTemplate(w, "index", nil)
+}
+
+func (bh BlogHandler) Edit(w http.ResponseWriter, r *http.Request) {
+	tmpl := config.GetTemplate("edit.html")
+	tmpl.ExecuteTemplate(w, "edit", nil)
 }
 
 //Create create blog layout
 func (bh BlogHandler) Create(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("views/layout/header.html", "views/blogs/create.html", "views/layout/footer.html"))
+	tmpl := config.GetTemplate("create.html")
 	tmpl.ExecuteTemplate(w, "create", nil)
 }
 
