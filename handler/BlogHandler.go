@@ -6,9 +6,12 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi"
+	"github.com/gorilla/sessions"
 )
 
 type BlogHandler struct{}
+
+var store = sessions.NewCookieStore([]byte("secret-key"))
 
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
 	tmpl := config.GetTemplate("index.html")
@@ -19,16 +22,31 @@ func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
 func (bh BlogHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	blog := model.Blog{}
-	db := model.DBCon
-	db.First(&blog, id)
+
+	model.DBCon.First(&blog, id)
+	resource := make(map[string]interface{})
+	resource["blog"] = blog
+
 	tmpl := config.GetTemplate("edit.html")
-	tmpl.ExecuteTemplate(w, "edit", blog)
+	tmpl.ExecuteTemplate(w, "edit", resource)
 }
 
 //Update update blog
 func (bh BlogHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	blog := model.Blog{Title: r.FormValue("title"), Content: r.FormValue("content")}
+	err := blog.Validate()
+	if err != nil {
+		model.DBCon.First(&blog, id)
+		resource := make(map[string]interface{})
+		resource["blog"] = blog
+		resource["error"] = err
+
+		tmpl := config.GetTemplate("edit.html")
+		tmpl.ExecuteTemplate(w, "edit", resource)
+		return
+	}
+
 	model.DBCon.Table("blogs").Where("id IN (?)", id).Updates(blog)
 	model.Redirect(w, r)
 }
