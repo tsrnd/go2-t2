@@ -7,6 +7,6 @@ import (
 // GetAllPosts return all posts
 func GetAllPosts() []model.Blog {
 	var blogs []model.Blog
-	model.DBCon.Select("id, title, content").Order("id desc, title").Find(&blogs)
+	model.DBCon.Find(&blogs)
 	return blogs
 }

@@ -9,10 +9,6 @@ import (
 type BlogHandler struct{}
 
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Not found", http.StatusNotFound)
-		return
-	}
 	blogs := repository.GetAllPosts()
 	tmpl := config.GetTemplate("index.html")
 	tmpl.ExecuteTemplate(w, "index", blogs)

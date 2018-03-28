@@ -9,6 +9,7 @@ var DBCon *gorm.DB
 
 // Blog is type of blog
 type Blog struct {
+	gorm.Model
 	ID      int
 	Title   string
 	Content string
