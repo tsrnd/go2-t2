@@ -1,10 +1,13 @@
 package model
 
-import validation "github.com/go-ozzo/ozzo-validation"
+import (
+	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/jinzhu/gorm"
+)
 
 // Blog struct blog
 type Blog struct {
-	Model
+	gorm.Model
 	Title   string
 	Content string
 }
