@@ -32,21 +32,17 @@ func (bh BlogHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 //Store save blog
 func (bh BlogHandler) Store(w http.ResponseWriter, r *http.Request) {
-	var blog model.Blog
-	err := blog.Validation(r.FormValue("title"), r.FormValue("content"))
+	blog := model.Blog{Title: r.FormValue("title"), Content: r.FormValue("content")}
+	err := blog.Validation()
 	if err != nil {
 		tmpl := config.GetTemplate("create.html")
 		tmpl.ExecuteTemplate(w, "create", err)
 	} else {
-		blog = model.Blog{Title: r.FormValue("title"), Content: r.FormValue("content")}
-
 		db := model.DBCon
 
-		db.NewRecord(blog) // => returns `true` as primary key is blank
+		db.NewRecord(blog)
 		db.Create(&blog)
 
-		target := "http://" + r.Host
-		http.Redirect(w, r, target, 301)
-
+		http.Redirect(w, r, "/", 301)
 	}
 }

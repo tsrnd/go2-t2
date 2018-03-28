@@ -1,6 +1,8 @@
 package model
 
 import (
+	"os"
+
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/jinzhu/gorm"
 )
@@ -12,9 +14,17 @@ type Blog struct {
 	Content string
 }
 
-func (b Blog) Validation(title string, content string) error {
-	return validation.Errors{
-		"title":   validation.Validate(title, validation.Required, validation.Length(1, 100)),
-		"content": validation.Validate(content, validation.Required),
-	}.Filter()
+// Table name
+const table = "blogs"
+
+func (b Blog) Validation() error {
+	return validation.ValidateStruct(&b,
+		validation.Field(&b.Title, validation.Required, validation.Length(5, 100)),
+		validation.Field(&b.Content, validation.Required),
+	)
+}
+
+func (b Blog) TableName() string {
+	dbName := os.Getenv("DB_DATABASE")
+	return dbName + "." + table
 }

@@ -4,11 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Model general struct
-// type Model struct {
-// 	gorm.BaseModel
-// }
-
 //DBCon dbcon
 var DBCon *gorm.DB
 
