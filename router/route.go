@@ -15,7 +15,10 @@ func Route() *chi.Mux {
 
 	r.Get("/", bh.Index)
 	r.Get("/{id}/edit", bh.Edit)
+	r.Post("/{id}/edit", bh.Update)
 	r.Get("/detail", bh.Detail)
+	r.Get("/create", bh.Create)
+	r.Post("/store", bh.Store)
 
 	return r
 }

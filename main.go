@@ -8,14 +8,15 @@ import (
 	"net/http"
 	"os"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/context"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
 	log.Printf("Server started on: http://localhost%s", os.Getenv("SERVER_PORT"))
 
 	r := router.Route()
-	http.ListenAndServe(os.Getenv("SERVER_PORT"), r)
+	http.ListenAndServe(os.Getenv("SERVER_PORT"), context.ClearHandler(r))
 }
 
 func init() {
