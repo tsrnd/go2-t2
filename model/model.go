@@ -23,8 +23,7 @@ func SetDatabase(database *gorm.DB) {
 }
 
 //Redirect redirect
-func Redirect(w http.ResponseWriter, r *http.Request) {
+func Redirect(w http.ResponseWriter, r *http.Request, target string) {
 	// remove/add not default ports from req.Host
-	target := "http://" + r.Host
 	http.Redirect(w, r, target, 301)
 }
