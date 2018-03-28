@@ -18,10 +18,3 @@ type Blog struct {
 func SetDatabase(database *gorm.DB) {
 	DBCon = database
 }
-
-// GetAllPosts return all posts
-func GetAllPosts() []Blog {
-	var blogs []Blog
-	DBCon.Select("id, title, content").Order("id desc, title").Find(&blogs)
-	return blogs
-}

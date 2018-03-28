@@ -1,15 +1,19 @@
 package handler
 
 import (
+	"go2-t2/blog/repository"
 	"go2-t2/config"
-	"go2-t2/model"
 	"net/http"
 )
 
 type BlogHandler struct{}
 
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
-	blogs := model.GetAllPosts()
+	if r.Method != "GET" {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return
+	}
+	blogs := repository.GetAllPosts()
 	tmpl := config.GetTemplate("index.html")
 	tmpl.ExecuteTemplate(w, "index", blogs)
 }
