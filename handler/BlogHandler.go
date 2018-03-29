@@ -2,8 +2,9 @@ package handler
 
 import (
 	"go2-t2/config"
-	"go2-t2/model"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
 type BlogHandler struct{}
@@ -24,9 +25,8 @@ func (bh BlogHandler) Detail(w http.ResponseWriter, r *http.Request) {
 }
 
 func (bh BlogHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	postID := r.URL.Query().Get("id")
-	db := model.DBCon
-	db.Delete(model.Blog{}, "id = ?", postID)
+	id := chi.URLParam(r, "id")
+	repository.Delete(id)
 
 	http.Redirect(w, r, "/", 301)
 }
