@@ -31,3 +31,10 @@ func GetAllPosts() []model.Blog {
 	}
 	return blogs
 }
+
+func Delete(id string) {
+	blog := model.Blog{}
+	model.DBCon.First(&blog, id)
+
+	model.DBCon.Delete(&blog)
+}

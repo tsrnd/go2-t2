@@ -89,3 +89,11 @@ func (bh BlogHandler) Store(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", 301)
 	}
 }
+
+//Delete delete blogs
+func (bh BlogHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	repository.Delete(id)
+
+	http.Redirect(w, r, "/", 301)
+}

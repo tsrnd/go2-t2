@@ -14,11 +14,12 @@ func Route() *chi.Mux {
 
 	r.Method(http.MethodGet, "/public/*", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
+	r.Get("/", bh.Index)
 	r.Get("/create", bh.Create)
 	r.Post("/create", bh.Store)
-	r.Get("/", bh.Index)
 	r.Get("/{id}/edit", bh.Edit)
 	r.Post("/{id}/edit", bh.Update)
+	r.Post("/delete/{{.id}}", bh.Delete)
 
 	return r
 }

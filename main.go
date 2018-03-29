@@ -7,9 +7,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+<<<<<<< HEAD
 
 	"github.com/gorilla/context"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+=======
+>>>>>>> 40c543874ac6f0596aba2e52915a84c7c26f0114
 )
 
 func main() {
