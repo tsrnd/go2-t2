@@ -9,7 +9,7 @@ func SetEnv() {
 	os.Setenv("DB_PORT", "5432")
 	os.Setenv("DB_DATABASE", "blog_golang")
 	os.Setenv("DB_USERNAME", "postgres")
-	os.Setenv("DB_PASSWORD", "root")
+	os.Setenv("DB_PASSWORD", "1")
 	os.Setenv("SSLMODE", "disable")
-	os.Setenv("SERVER_PORT", ":6969")
+	os.Setenv("SERVER_PORT", ":5000")
 }
