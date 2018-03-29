@@ -38,8 +38,14 @@ func (bh BlogHandler) Store(w http.ResponseWriter, r *http.Request) {
 	blog := model.Blog{Title: r.FormValue("title"), Content: r.FormValue("content")}
 	err := validate.Struct(blog)
 	if err != nil {
+		errors := make(map[string]interface{})
+
+		for _, errV := range err.(validator.ValidationErrors) {
+			errors[errV.Field()] = errV.Field() + " " + errV.ActualTag()
+		}
+
 		tmpl := config.GetTemplate("create.html")
-		tmpl.ExecuteTemplate(w, "create", err)
+		tmpl.ExecuteTemplate(w, "create", errors)
 	} else {
 		repository.Store(blog)
 
