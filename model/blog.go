@@ -10,8 +10,8 @@ import (
 // Blog struct blog
 type Blog struct {
 	gorm.Model
-	Title   string
-	Content string
+	Title   string `validate:"required"`
+	Content string `validate:"required"`
 }
 
 // Table name
