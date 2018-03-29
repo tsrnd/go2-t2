@@ -2,14 +2,16 @@ package handler
 
 import (
 	"go2-t2/config"
+	"go2-t2/repository"
 	"net/http"
 )
 
 type BlogHandler struct{}
 
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
+	blogs := repository.GetAllPosts()
 	tmpl := config.GetTemplate("index.html")
-	tmpl.ExecuteTemplate(w, "index", nil)
+	tmpl.ExecuteTemplate(w, "index", blogs)
 }
 
 func (bh BlogHandler) Edit(w http.ResponseWriter, r *http.Request) {

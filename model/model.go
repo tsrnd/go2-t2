@@ -1,11 +1,21 @@
 package model
 
-import "database/sql"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 //DBCon dbcon
-var DBCon *sql.DB
+var DBCon *gorm.DB
+
+// Blog is type of blog
+type Blog struct {
+	gorm.Model
+	ID      int
+	Title   string
+	Content string
+}
 
 //SetDatabase return DBCon
-func SetDatabase(database *sql.DB) {
+func SetDatabase(database *gorm.DB) {
 	DBCon = database
 }
