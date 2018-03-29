@@ -16,6 +16,6 @@ func Route() *chi.Mux {
 	r.Get("/", bh.Index)
 	r.Get("/{id}/edit", bh.Edit)
 	r.Get("/detail", bh.Detail)
-
+	r.Post("/delete/{{.ID}}", bh.Delete)
 	return r
 }
