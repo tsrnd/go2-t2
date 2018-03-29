@@ -2,8 +2,8 @@ package handler
 
 import (
 	"go2-t2/config"
-	"go2-t2/handler/repository"
 	"go2-t2/model"
+	"go2-t2/repository"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -18,9 +18,11 @@ func init() {
 	validate = validator.New()
 }
 
+//Index show list blogs
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
+	blogs := repository.GetAllPosts()
 	tmpl := config.GetTemplate("index.html")
-	tmpl.ExecuteTemplate(w, "index", nil)
+	tmpl.ExecuteTemplate(w, "index", blogs)
 }
 
 //Edit form edit blog layout
