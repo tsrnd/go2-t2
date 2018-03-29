@@ -13,10 +13,6 @@ type BlogHandler struct{}
 
 var validate *validator.Validate
 
-func init() {
-	validate = validator.New()
-}
-
 func (bh BlogHandler) Index(w http.ResponseWriter, r *http.Request) {
 	tmpl := config.GetTemplate("index.html")
 	tmpl.ExecuteTemplate(w, "index", nil)
@@ -36,6 +32,7 @@ func (bh BlogHandler) Create(w http.ResponseWriter, r *http.Request) {
 //Store save blog
 func (bh BlogHandler) Store(w http.ResponseWriter, r *http.Request) {
 	blog := model.Blog{Title: r.FormValue("title"), Content: r.FormValue("content")}
+	validate = validator.New()
 	err := validate.Struct(blog)
 	if err != nil {
 		errors := make(map[string]interface{})

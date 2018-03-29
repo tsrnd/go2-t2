@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
