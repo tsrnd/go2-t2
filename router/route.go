@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
+//Route route
 func Route() *chi.Mux {
 	var bh handler.BlogHandler
 	r := chi.NewRouter()
@@ -14,8 +15,11 @@ func Route() *chi.Mux {
 	r.Method(http.MethodGet, "/public/*", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
 	r.Get("/", bh.Index)
+	r.Get("/create", bh.Create)
+	r.Post("/create", bh.Store)
 	r.Get("/{id}/edit", bh.Edit)
-	r.Get("/detail", bh.Detail)
+	r.Post("/{id}/edit", bh.Update)
+	r.Post("/delete/{id}", bh.Delete)
 
 	return r
 }
