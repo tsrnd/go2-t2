@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"go2-t2/blog/repository"
 	"go2-t2/config"
+	"go2-t2/repository"
 	"net/http"
 )
 
