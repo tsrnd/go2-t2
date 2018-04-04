@@ -10,6 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	Register(request PostRegisterRequest) error
 }
 
 // Usecase struct.
@@ -33,6 +34,19 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 		return response, utils.ErrorsWrap(err, "repository.GenerateJWToken() error")
 	}
 	return
+}
+
+// Register func.
+func (u *Usecase) Register(request PostRegisterRequest) error {
+	// var userID int64
+	tx := u.db.Begin()
+	_, err := u.repository.CreateUser(request.UUID, request.UserName, tx)
+
+	if err != nil {
+		return utils.ErrorsWrap(err, "cant create user")
+	}
+	tx.Commit()
+	return nil
 }
 
 // NewUsecase responses new Usecase instance.

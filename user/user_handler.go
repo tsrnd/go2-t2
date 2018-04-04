@@ -50,6 +50,26 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJSON(w, response)
 }
 
+// Register register new user
+func (h *HTTPHandler) Register(w http.ResponseWriter, r *http.Request) {
+	request := PostRegisterRequest{}
+	err := h.Parse(r, &request)
+	if err != nil {
+		common := CommonResponse{Message: "Parse request error.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
+	if err = h.Validate(w, request); err != nil {
+		return
+	}
+	err = h.usecase.Register(request)
+	if err != nil {
+		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
+}
+
 // NewHTTPHandler responses new HTTPHandler instance.
 func NewHTTPHandler(bh *handler.BaseHTTPHandler, bu *usecase.BaseUsecase, br *repository.BaseRepository, s *infrastructure.SQL, c *infrastructure.Cache) *HTTPHandler {
 	// user set.
