@@ -40,7 +40,6 @@ func startExt() {
 	// after process
 	defer infrastructure.CloseLogger(r.LoggerHandler.Logfile)
 	defer infrastructure.CloseRedis(r.CacheHandler.Conn)
-	defer infrastructure.CloseLogger(mLogger.Logfile)
 
 	_ = http.ListenAndServe(":8080", mux)
 }

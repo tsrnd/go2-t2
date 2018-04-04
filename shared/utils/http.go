@@ -37,7 +37,6 @@ func MultipartFileWriter(writer *multipart.Writer, paramName, path string) (err 
 	h.Set("Content-Disposition",
 		fmt.Sprintf(`form-data; name="%s"; filename="%s"`,
 			quoteEscaper.Replace(paramName), quoteEscaper.Replace(fi.Name())))
-	h.Set("Content-Type", DetectFileContentType(fileContents))
 	part, err := writer.CreatePart(h)
 	if err != nil {
 		return ErrorsWrapf(err, "can't create part (%v)", path)

@@ -212,7 +212,7 @@ func (h *BaseHTTPHandler) GetFileHeaderContentType(file multipart.File) (string,
 			return "", utils.ErrorsNew("can't read file header")
 		}
 	}
-	return strings.ToLower(utils.DetectFileContentType(fileHeader)), err
+	return strings.ToLower("JPG"), err
 }
 
 // Validate func validate request of user
