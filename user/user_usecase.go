@@ -10,6 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	GetAllUsers() ([]GetGetAllUsers, error)
 }
 
 // Usecase struct.
@@ -32,6 +33,22 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 	if err != nil {
 		return response, utils.ErrorsWrap(err, "repository.GenerateJWToken() error")
 	}
+	return
+}
+
+// GetAllUsers func.
+func (u *Usecase) GetAllUsers() (response []GetGetAllUsers, err error) {
+	users, err := u.repository.Find()
+
+	response = []GetGetAllUsers{}
+	for _, user := range users {
+		response = append(response, GetGetAllUsers{
+			ID:       user.ID,
+			UUID:     user.UUID,
+			UserName: user.UserName,
+		})
+	}
+
 	return
 }
 

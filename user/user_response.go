@@ -11,3 +11,10 @@ type PostRegisterByDeviceResponse struct {
 	CommonResponse
 	Token string `json:"token"`
 }
+
+// GetGetAllUsers response.
+type GetGetAllUsers struct {
+	ID       uint64 `json:"id"`
+	UUID     string `json:"uuid"`
+	UserName string `json:"user_name"`
+}

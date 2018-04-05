@@ -50,6 +50,12 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJSON(w, response)
 }
 
+// GetAllUsers get all users
+func (h *HTTPHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	response, _ := h.usecase.GetAllUsers()
+	h.ResponseJSON(w, response)
+}
+
 // NewHTTPHandler responses new HTTPHandler instance.
 func NewHTTPHandler(bh *handler.BaseHTTPHandler, bu *usecase.BaseUsecase, br *repository.BaseRepository, s *infrastructure.SQL, c *infrastructure.Cache) *HTTPHandler {
 	// user set.
