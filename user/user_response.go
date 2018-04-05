@@ -11,9 +11,3 @@ type PostRegisterByDeviceResponse struct {
 	CommonResponse
 	Token string `json:"token"`
 }
-
-// PostRegisterResponse response.
-type PostRegisterResponse struct {
-	CommonResponse
-	Token string `json:"token"`
-}
