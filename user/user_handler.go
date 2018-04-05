@@ -52,7 +52,12 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 
 // GetAllUsers get all users
 func (h *HTTPHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	response, _ := h.usecase.GetAllUsers()
+	response, err := h.usecase.GetAllUsers()
+	if err != nil {
+		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
 	h.ResponseJSON(w, response)
 }
 
