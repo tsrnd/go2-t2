@@ -2,7 +2,9 @@ package user
 
 import (
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
 	"github.com/tsrnd/trainning/infrastructure"
 	"github.com/tsrnd/trainning/shared/handler"
@@ -48,6 +50,21 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	h.ResponseJSON(w, response)
+}
+
+//Delete user
+func (h *HTTPHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.ParseUint(chi.URLParam(r, "id"), 10, 64)
+	err = h.usecase.DeleteUser(userID)
+
+	if err != nil {
+		common := CommonResponse{Message: "user not found", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
+
+	common := CommonResponse{Message: "Delete Success.", Errors: nil}
+	h.ResponseJSON(w, common)
 }
 
 // NewHTTPHandler responses new HTTPHandler instance.

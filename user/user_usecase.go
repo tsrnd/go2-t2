@@ -1,6 +1,8 @@
 package user
 
 import (
+	"errors"
+
 	"github.com/jinzhu/gorm"
 	"github.com/tsrnd/trainning/authentication"
 	"github.com/tsrnd/trainning/shared/usecase"
@@ -10,6 +12,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	DeleteUser(userID uint64) error
 }
 
 // Usecase struct.
@@ -33,6 +36,18 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 		return response, utils.ErrorsWrap(err, "repository.GenerateJWToken() error")
 	}
 	return
+}
+
+// Delete user func.
+func (u *Usecase) DeleteUser(userID uint64) error {
+	user, err := u.repository.FindUserByID(userID)
+	if err != nil {
+		return utils.ErrorsWrap(err, "user not found")
+	}
+	if err = u.repository.Delete(user); err == gorm.ErrRecordNotFound {
+		return errors.New("server")
+	}
+	return nil
 }
 
 // NewUsecase responses new Usecase instance.

@@ -10,6 +10,8 @@ import (
 // RepositoryInterface interface.
 type RepositoryInterface interface {
 	FindOrCreate(string) (User, error)
+	Delete(User) error
+	FindUserByID(uint64) (User, error)
 }
 
 // Repository struct.
@@ -21,6 +23,22 @@ type Repository struct {
 	readDB *gorm.DB
 	// redis connect Redis.
 	redis *redis.Conn
+}
+
+// FindUserID find User by ID.
+func (r *Repository) FindUserByID(userID uint64) (User, error) {
+	user := User{}
+	err := r.masterDB.Where("id_user_app = ?", userID).First(&user).Error
+	if err == gorm.ErrRecordNotFound {
+		return user, err
+	}
+	return user, utils.ErrorsWrap(err, "can't find")
+}
+
+// FindAndDelete find user.
+func (r *Repository) Delete(user User) error {
+	err := r.masterDB.Delete(&user).Error
+	return utils.ErrorsWrap(err, "Can't not delete")
 }
 
 // FindOrCreate find user by uuid or create if uuid is not existed in DB.
