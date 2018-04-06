@@ -3,7 +3,6 @@ package user
 import (
 	"net/http"
 	"strconv"
-
 	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
 	"github.com/tsrnd/trainning/infrastructure"
@@ -52,6 +51,17 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJSON(w, response)
 }
 
+// GetAllUsers get all users
+func (h *HTTPHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	response, err := h.usecase.GetAllUsers()
+	if err != nil {
+		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
 // GetUserByID func
 func (h *HTTPHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseUint(chi.URLParam(r, "id"), 0, 64)
@@ -62,6 +72,7 @@ func (h *HTTPHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// get user by id.
 	response, err := h.usecase.GetUserByID(id)
 	if err != nil {
 		h.Logger.WithFields(logrus.Fields{
@@ -76,10 +87,15 @@ func (h *HTTPHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 // UpdateUserApp func
 func (h *HTTPHandler) UpdateUserApp(w http.ResponseWriter, r *http.Request) {
-	userAppID, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	userAppID, err := strconv.ParseUint(chi.URLParam(r, "id"), 0, 64)
+	if err != nil {
+		common := CommonResponse{Message: "ID isn't number.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
 	request := PutUpdateByUserRequest{}
-	request.ID = uint64(userAppID)
-	err := h.Parse(r, &request)
+	request.ID = userAppID
+	err = h.Parse(r, &request)
 	if err != nil {
 		common := CommonResponse{Message: "Parse request error.", Errors: nil}
 		h.StatusBadRequest(w, common)
@@ -91,7 +107,7 @@ func (h *HTTPHandler) UpdateUserApp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// request login by uuid.
+	// request update user_app.
 	response, err := h.usecase.UpdateUser(request)
 	if err != nil {
 		common := CommonResponse{Message: "Internal server error response.", Errors: nil}

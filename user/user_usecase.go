@@ -10,6 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	GetAllUsers() ([]GetUserResponse, error)
 	GetUserByID(id uint64) (GetGetUserByIDResponse, error)
 	UpdateUser(PutUpdateByUserRequest) (CommonResponse, error)
 }
@@ -37,6 +38,22 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 	return
 }
 
+// GetAllUsers func.
+func (u *Usecase) GetAllUsers() (response []GetUserResponse, err error) {
+	users, err := u.repository.FindAll()
+
+	response = []GetUserResponse{}
+	for _, user := range users {
+		response = append(response, GetUserResponse{
+			ID:       user.ID,
+			UUID:     user.UUID,
+			UserName: user.UserName,
+		})
+  }
+
+	return
+}
+
 // GetUserByID func.
 func (u *Usecase) GetUserByID(id uint64) (response GetGetUserByIDResponse, err error) {
 	user, err := u.repository.First(id)
@@ -58,10 +75,7 @@ func (u *Usecase) GetUserByID(id uint64) (response GetGetUserByIDResponse, err e
 func (u *Usecase) UpdateUser(request PutUpdateByUserRequest) (CommonResponse, error) {
 	response := CommonResponse{Message: "Update success", Errors: nil}
 	err := u.repository.Update(request.ID, request.UserName)
-	if err != nil {
-		return response, utils.ErrorsWrap(err, "repositoryInterface.Update() error")
-	}
-	return response, err
+	return response, utils.ErrorsWrap(err, "repositoryInterface.Update()")
 }
 
 // NewUsecase responses new Usecase instance.
