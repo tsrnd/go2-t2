@@ -53,6 +53,27 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJSON(w, response)
 }
 
+// Create create new user app
+func (h *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
+	request := PostCreateRequest{}
+	err := h.Parse(r, &request)
+	if err != nil {
+		common := CommonResponse{Message: "Parse request error.", Errors: []string{}}
+		h.StatusBadRequest(w, common)
+		return
+	}
+	if err = h.Validate(w, request); err != nil {
+		return
+	}
+	response, err := h.usecase.Create(request)
+	if err != nil {
+		common := CommonResponse{Message: "Internal server error response.", Errors: []string{}}
+		h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
 // GetAllUsers get all users
 func (h *HTTPHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	response, err := h.usecase.GetAllUsers()

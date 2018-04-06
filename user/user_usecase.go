@@ -10,6 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	Create(request PostCreateRequest) (PostCreateResponse, error)
 	GetAllUsers() ([]GetUserResponse, error)
 	GetUserByID(id uint64) (GetGetUserByIDResponse, error)
 }
@@ -35,6 +36,14 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 		return response, utils.ErrorsWrap(err, "repository.GenerateJWToken() error")
 	}
 	return
+}
+
+// Create func.
+func (u *Usecase) Create(request PostCreateRequest) (response PostCreateResponse, err error) {
+	response = PostCreateResponse{}
+	response.ID, err = u.repository.CreateUserApp(request.UUID, request.UserName)
+
+	return response, utils.ErrorsWrap(err, "repository.CreateUser() error")
 }
 
 // GetAllUsers func.

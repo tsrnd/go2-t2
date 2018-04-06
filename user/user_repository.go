@@ -10,6 +10,7 @@ import (
 // RepositoryInterface interface.
 type RepositoryInterface interface {
 	FindOrCreate(string) (User, error)
+	CreateUserApp(string, string) (uint64, error)
 	FindAll() ([]User, error)
 	First(uint64) (User, error)
 }
@@ -53,4 +54,12 @@ func (r *Repository) First(id uint64) (User, error) {
 // NewRepository responses new Repository instance.
 func NewRepository(br *repository.BaseRepository, master *gorm.DB, read *gorm.DB, redis *redis.Conn) *Repository {
 	return &Repository{BaseRepository: *br, masterDB: master, readDB: read, redis: redis}
+}
+
+// CreateUserApp create user app
+func (r *Repository) CreateUserApp(uuid string, username string) (uint64, error) {
+	user := User{UUID: uuid, UserName: username}
+	result := r.masterDB.Create(&user)
+
+	return user.ID, utils.ErrorsWrap(result.Error, "Can't create user app")
 }
