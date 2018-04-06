@@ -10,6 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	UpdateUser(PutUpdateByUserRequest) (CommonResponse, error)
 }
 
 // Usecase struct.
@@ -33,6 +34,16 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 		return response, utils.ErrorsWrap(err, "repository.GenerateJWToken() error")
 	}
 	return
+}
+
+// UpdateUser func
+func (u *Usecase) UpdateUser(request PutUpdateByUserRequest) (CommonResponse, error) {
+	response := CommonResponse{Message: "Update success", Errors: nil}
+	err := u.repository.Update(request.ID, request.UserName)
+	if err != nil {
+		return response, utils.ErrorsWrap(err, "repositoryInterface.Update() error")
+	}
+	return response, err
 }
 
 // NewUsecase responses new Usecase instance.

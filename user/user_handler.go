@@ -2,7 +2,9 @@ package user
 
 import (
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
 	"github.com/tsrnd/trainning/infrastructure"
 	"github.com/tsrnd/trainning/shared/handler"
@@ -43,6 +45,33 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 		h.Logger.WithFields(logrus.Fields{
 			"error": err,
 		}).Error("usecaseInterface.LoginByDevice() error")
+		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
+// UpdateUserApp func
+func (h *HTTPHandler) UpdateUserApp(w http.ResponseWriter, r *http.Request) {
+	userAppID, _ := strconv.Atoi(chi.URLParam(r, "id"))
+	request := PutUpdateByUserRequest{}
+	request.ID = uint64(userAppID)
+	err := h.Parse(r, &request)
+	if err != nil {
+		common := CommonResponse{Message: "Parse request error.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
+
+	// validate get data.
+	if err = h.Validate(w, request); err != nil {
+		return
+	}
+
+	// request login by uuid.
+	response, err := h.usecase.UpdateUser(request)
+	if err != nil {
 		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
 		h.StatusServerError(w, common)
 		return
