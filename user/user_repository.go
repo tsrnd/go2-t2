@@ -13,6 +13,7 @@ type RepositoryInterface interface {
 	CreateUserApp(string, string) (uint64, error)
 	FindAll() ([]User, error)
 	First(uint64) (User, error)
+	Update(uint64, string) error
 }
 
 // Repository struct.
@@ -31,6 +32,14 @@ func (r *Repository) FindOrCreate(uuid string) (User, error) {
 	user := User{UUID: uuid}
 	err := r.masterDB.FirstOrCreate(&user, user).Error
 	return user, utils.ErrorsWrap(err, "Can't first or create")
+}
+
+// Update user with user_name
+func (r *Repository) Update(idUserApp uint64, userName string) error {
+	user := User{}
+	r.masterDB.First(&user, idUserApp)
+	err := r.masterDB.Model(&user).Updates(User{UserName: userName}).Error
+	return utils.ErrorsWrap(err, "Can't update")
 }
 
 // FindAll find all users

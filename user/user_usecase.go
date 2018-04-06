@@ -13,6 +13,7 @@ type UsecaseInterface interface {
 	Create(request PostCreateRequest) (PostCreateResponse, error)
 	GetAllUsers() ([]GetUserResponse, error)
 	GetUserByID(id uint64) (GetGetUserByIDResponse, error)
+	UpdateUser(PutUpdateByUserRequest) (CommonResponse, error)
 }
 
 // Usecase struct.
@@ -81,6 +82,13 @@ func (u *Usecase) GetUserByID(id uint64) (response GetGetUserByIDResponse, err e
 	}
 
 	return
+}
+
+// UpdateUser func
+func (u *Usecase) UpdateUser(request PutUpdateByUserRequest) (CommonResponse, error) {
+	response := CommonResponse{Message: "Update success", Errors: nil}
+	err := u.repository.Update(request.ID, request.UserName)
+	return response, utils.ErrorsWrap(err, "repositoryInterface.Update()")
 }
 
 // NewUsecase responses new Usecase instance.

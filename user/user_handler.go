@@ -3,9 +3,7 @@ package user
 import (
 	"net/http"
 	"strconv"
-
 	"github.com/go-chi/chi"
-
 	"github.com/sirupsen/logrus"
 	"github.com/tsrnd/trainning/infrastructure"
 	"github.com/tsrnd/trainning/shared/handler"
@@ -102,6 +100,38 @@ func (h *HTTPHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 			"error": err,
 		}).Error("usecaseInterface.GetUserByID() error")
 		common := CommonResponse{Message: "Internal server error response", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
+// UpdateUserApp func
+func (h *HTTPHandler) UpdateUserApp(w http.ResponseWriter, r *http.Request) {
+	userAppID, err := strconv.ParseUint(chi.URLParam(r, "id"), 0, 64)
+	if err != nil {
+		common := CommonResponse{Message: "ID isn't number.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
+	request := PutUpdateByUserRequest{}
+	request.ID = userAppID
+	err = h.Parse(r, &request)
+	if err != nil {
+		common := CommonResponse{Message: "Parse request error.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
+
+	// validate get data.
+	if err = h.Validate(w, request); err != nil {
+		return
+	}
+
+	// request update user_app.
+	response, err := h.usecase.UpdateUser(request)
+	if err != nil {
+		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
 		h.StatusServerError(w, common)
 		return
 	}

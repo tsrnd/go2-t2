@@ -51,5 +51,6 @@ func (r *Router) SetupHandler() {
 		cr.Post("/create", uh.Create)
 		cr.Get("/users", uh.GetAllUsers)
 		cr.Get("/users/{id}", uh.GetUserByID)
+		cr.Put("/users/{id}", uh.UpdateUserApp)
 	})
 }
