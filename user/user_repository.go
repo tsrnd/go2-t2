@@ -37,8 +37,7 @@ func (r *Repository) FindOrCreate(uuid string) (User, error) {
 func (r *Repository) Update(idUserApp uint64, userName string) error {
 	user := User{}
 	r.masterDB.First(&user, idUserApp)
-	user.UserName = userName
-	err := r.masterDB.Save(&user).Error
+	err := r.masterDB.Model(&user).Updates(User{UserName: userName}).Error
 	return utils.ErrorsWrap(err, "Can't update")
 }
 
