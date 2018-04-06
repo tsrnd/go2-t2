@@ -12,10 +12,15 @@ type PostRegisterByDeviceResponse struct {
 	Token string `json:"token"`
 }
 
+// PostCreateResponse struct.
+type PostCreateResponse struct {
+	ID uint64 `json:"id"`
+}
+
 // GetUserResponse response.
 type GetUserResponse struct {
 	ID       uint64 `json:"id"`
-  UUID     string `json:"uuid"`
+	UUID     string `json:"uuid"`
 	UserName string `json:"user_name"`
 }
 
