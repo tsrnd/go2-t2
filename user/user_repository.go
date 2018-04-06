@@ -11,6 +11,7 @@ import (
 type RepositoryInterface interface {
 	FindOrCreate(string) (User, error)
 	FindAll() ([]User, error)
+	First(uint64) (User, error)
 }
 
 // Repository struct.
@@ -36,6 +37,13 @@ func (r *Repository) FindAll() ([]User, error) {
 	users := []User{}
 	err := r.readDB.Find(&users).Error
 	return users, err
+}
+
+// First user by id in DB.
+func (r *Repository) First(id uint64) (User, error) {
+	user := User{ID: id}
+	err := r.readDB.First(&user).Error
+	return user, utils.ErrorsWrap(err, "Can't find user")
 }
 
 // NewRepository responses new Repository instance.

@@ -11,6 +11,7 @@ import (
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
 	GetAllUsers() ([]GetUserResponse, error)
+	GetUserByID(id uint64) (GetGetUserByIDResponse, error)
 }
 
 // Usecase struct.
@@ -47,6 +48,23 @@ func (u *Usecase) GetAllUsers() (response []GetUserResponse, err error) {
 			UUID:     user.UUID,
 			UserName: user.UserName,
 		})
+  }
+
+	return
+}
+
+// GetUserByID func.
+func (u *Usecase) GetUserByID(id uint64) (response GetGetUserByIDResponse, err error) {
+	user, err := u.repository.First(id)
+
+	if err != nil {
+		return response, utils.ErrorsWrap(err, "repositoryInterface.First() error")
+	}
+
+	response = GetGetUserByIDResponse{
+		ID:       user.ID,
+		UUID:     user.UUID,
+		UserName: user.UserName,
 	}
 
 	return

@@ -14,4 +14,4 @@
 .glide/
 config/env.go
 vendor/
-tmp/
+tmp

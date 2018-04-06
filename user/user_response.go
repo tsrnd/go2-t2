@@ -15,6 +15,13 @@ type PostRegisterByDeviceResponse struct {
 // GetUserResponse response.
 type GetUserResponse struct {
 	ID       uint64 `json:"id"`
+  UUID     string `json:"uuid"`
+	UserName string `json:"user_name"`
+}
+
+// GetGetUserByIDResponse response.
+type GetGetUserByIDResponse struct {
+	ID       uint64 `json:"id_user_app"`
 	UUID     string `json:"uuid"`
 	UserName string `json:"user_name"`
 }
