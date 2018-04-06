@@ -10,7 +10,7 @@ import (
 // RepositoryInterface interface.
 type RepositoryInterface interface {
 	FindOrCreate(string) (User, error)
-	Find() ([]User, error)
+	FindAll() ([]User, error)
 }
 
 // Repository struct.
@@ -31,8 +31,8 @@ func (r *Repository) FindOrCreate(uuid string) (User, error) {
 	return user, utils.ErrorsWrap(err, "Can't first or create")
 }
 
-// Find find all users
-func (r *Repository) Find() ([]User, error) {
+// FindAll find all users
+func (r *Repository) FindAll() ([]User, error) {
 	users := []User{}
 	err := r.readDB.Find(&users).Error
 	return users, err
