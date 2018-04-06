@@ -58,7 +58,7 @@ func (h *HTTPHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	response, err := h.usecase.GetAllUsers()
 	if err != nil {
 		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
-    h.StatusServerError(w, common)
+		h.StatusServerError(w, common)
 		return
 	}
 	h.ResponseJSON(w, response)

@@ -41,6 +41,10 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 func (u *Usecase) GetAllUsers() (response []GetUserResponse, err error) {
 	users, err := u.repository.FindAll()
 
+	if err != nil {
+		return response, utils.ErrorsWrap(err, "repositoryInterface.FindAll() error")
+	}
+
 	response = []GetUserResponse{}
 	for _, user := range users {
 		response = append(response, GetUserResponse{
@@ -48,7 +52,7 @@ func (u *Usecase) GetAllUsers() (response []GetUserResponse, err error) {
 			UUID:     user.UUID,
 			UserName: user.UserName,
 		})
-  }
+	}
 
 	return
 }
