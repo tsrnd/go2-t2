@@ -10,6 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
+	Create(request PostCreateRequest) (PostCreateResponse, error)
 	GetAllUsers() ([]GetUserResponse, error)
 	GetUserByID(id uint64) (GetGetUserByIDResponse, error)
 	UpdateUser(PutUpdateByUserRequest) (CommonResponse, error)
@@ -38,9 +39,21 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 	return
 }
 
+// Create func.
+func (u *Usecase) Create(request PostCreateRequest) (response PostCreateResponse, err error) {
+	response = PostCreateResponse{}
+	response.ID, err = u.repository.CreateUserApp(request.UUID, request.UserName)
+
+	return response, utils.ErrorsWrap(err, "repository.CreateUser() error")
+}
+
 // GetAllUsers func.
 func (u *Usecase) GetAllUsers() (response []GetUserResponse, err error) {
 	users, err := u.repository.FindAll()
+
+	if err != nil {
+		return response, utils.ErrorsWrap(err, "repositoryInterface.FindAll() error")
+	}
 
 	response = []GetUserResponse{}
 	for _, user := range users {
@@ -49,7 +62,7 @@ func (u *Usecase) GetAllUsers() (response []GetUserResponse, err error) {
 			UUID:     user.UUID,
 			UserName: user.UserName,
 		})
-  }
+	}
 
 	return
 }

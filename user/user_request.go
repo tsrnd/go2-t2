@@ -10,3 +10,8 @@ type PutUpdateByUserRequest struct {
 	ID       uint64
 	UserName string `form:"username" validate:"required"`
 }
+// PostCreateRequest struct.
+type PostCreateRequest struct {
+	UUID     string `form:"uuid" validate:"required"`
+	UserName string `form:"user_name" validate:"required"`
+}
