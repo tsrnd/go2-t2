@@ -36,7 +36,11 @@ func (r *Repository) FindOrCreate(uuid string) (User, error) {
 func (r *Repository) FindAll() ([]User, error) {
 	users := []User{}
 	err := r.readDB.Find(&users).Error
-	return users, utils.ErrorsWrap(err, "Can't get list user")
+	if err != nil {
+		return users, utils.ErrorsWrap(err, "can't get user")
+	}
+
+	return users, nil
 }
 
 // First user by id in DB.
