@@ -12,7 +12,7 @@ type PostRegisterByDeviceResponse struct {
 	Token string `json:"token"`
 }
 
-// PostCreateRepository struct.
-type PostCreateRepository struct {
+// PostCreateResponse struct.
+type PostCreateResponse struct {
 	ID uint64 `json:"id"`
 }
