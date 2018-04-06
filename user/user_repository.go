@@ -10,6 +10,7 @@ import (
 // RepositoryInterface interface.
 type RepositoryInterface interface {
 	FindOrCreate(string) (User, error)
+	FindAll() ([]User, error)
 	First(uint64) (User, error)
 }
 
@@ -29,6 +30,13 @@ func (r *Repository) FindOrCreate(uuid string) (User, error) {
 	user := User{UUID: uuid}
 	err := r.masterDB.FirstOrCreate(&user, user).Error
 	return user, utils.ErrorsWrap(err, "Can't first or create")
+}
+
+// FindAll find all users
+func (r *Repository) FindAll() ([]User, error) {
+	users := []User{}
+	err := r.readDB.Find(&users).Error
+	return users, err
 }
 
 // First user by id in DB.

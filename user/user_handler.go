@@ -53,6 +53,17 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJSON(w, response)
 }
 
+// GetAllUsers get all users
+func (h *HTTPHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	response, err := h.usecase.GetAllUsers()
+	if err != nil {
+		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
+    h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
 // GetUserByID func
 func (h *HTTPHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseUint(chi.URLParam(r, "id"), 0, 64)
