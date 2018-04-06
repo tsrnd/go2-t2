@@ -11,3 +11,7 @@ type PostRegisterByDeviceResponse struct {
 	CommonResponse
 	Token string `json:"token"`
 }
+
+type DeleteUserResponse struct {
+	Message string `json:"message"`
+}

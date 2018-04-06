@@ -2,7 +2,9 @@ package user
 
 import (
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	"github.com/sirupsen/logrus"
 	"github.com/tsrnd/trainning/infrastructure"
 	"github.com/tsrnd/trainning/shared/handler"
@@ -45,6 +47,32 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 		}).Error("usecaseInterface.LoginByDevice() error")
 		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
 		h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
+//Delete user
+func (h *HTTPHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	IdUserApp, err := strconv.ParseUint(chi.URLParam(r, "id_user_app"), 10, 64)
+	request := DeleteUserRequest{}
+	request.IdUserApp = IdUserApp
+	err = h.Parse(r, &request)
+
+	if err != nil {
+		common := CommonResponse{Message: "Parse request error.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
+	// validate get data.
+	if err = h.Validate(w, request); err != nil {
+		return
+	}
+
+	response, err := h.usecase.DeleteUser(IdUserApp)
+	if err != nil {
+		response.Message = "Error when delete user"
+		h.StatusServerError(w, response)
 		return
 	}
 	h.ResponseJSON(w, response)
