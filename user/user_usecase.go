@@ -40,10 +40,7 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 func (u *Usecase) Create(request PostCreateRequest) (err error) {
 	err = u.repository.CreateUserApp(request.UUID, request.UserName)
 
-	if err != nil {
-		return utils.ErrorsWrap(err, "repository.CreateUser() error")
-	}
-	return nil
+	return utils.ErrorsWrap(err, "repository.CreateUser() error")
 }
 
 // NewUsecase responses new Usecase instance.
