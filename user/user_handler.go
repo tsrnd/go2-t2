@@ -52,6 +52,28 @@ func (h *HTTPHandler) RegisterByDevice(w http.ResponseWriter, r *http.Request) {
 	h.ResponseJSON(w, response)
 }
 
+// GetUserByID func
+func (h *HTTPHandler) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseUint(chi.URLParam(r, "id"), 0, 64)
+
+	if err != nil {
+		common := CommonResponse{Message: "ID isn't number.", Errors: nil}
+		h.StatusBadRequest(w, common)
+		return
+	}
+
+	response, err := h.usecase.GetUserByID(id)
+	if err != nil {
+		h.Logger.WithFields(logrus.Fields{
+			"error": err,
+		}).Error("usecaseInterface.GetUserByID() error")
+		common := CommonResponse{Message: "Internal server error response", Errors: nil}
+		h.StatusServerError(w, common)
+		return
+	}
+	h.ResponseJSON(w, response)
+}
+
 // UpdateUserApp func
 func (h *HTTPHandler) UpdateUserApp(w http.ResponseWriter, r *http.Request) {
 	userAppID, _ := strconv.Atoi(chi.URLParam(r, "id"))

@@ -10,6 +10,7 @@ import (
 // RepositoryInterface interface.
 type RepositoryInterface interface {
 	FindOrCreate(string) (User, error)
+	First(uint64) (User, error)
 	Update(uint64, string) error
 }
 
@@ -38,6 +39,13 @@ func (r *Repository) Update(idUserApp uint64, userName string) error {
 	user.UserName = userName
 	err := r.masterDB.Save(&user).Error
 	return utils.ErrorsWrap(err, "Can't update")
+}
+
+// First user by id in DB.
+func (r *Repository) First(id uint64) (User, error) {
+	user := User{ID: id}
+	err := r.readDB.First(&user).Error
+	return user, utils.ErrorsWrap(err, "Can't find user")
 }
 
 // NewRepository responses new Repository instance.
