@@ -55,22 +55,21 @@ func (h *HTTPHandler) Create(w http.ResponseWriter, r *http.Request) {
 	request := PostCreateRequest{}
 	err := h.Parse(r, &request)
 	if err != nil {
-		common := CommonResponse{Message: "Parse request error.", Errors: nil}
+		common := CommonResponse{Message: "Parse request error.", Errors: []string{}}
 		h.StatusBadRequest(w, common)
 		return
 	}
 	if err = h.Validate(w, request); err != nil {
 		return
 	}
-	err = h.usecase.Create(request)
+	response, err := h.usecase.Create(request)
 	if err != nil {
-		common := CommonResponse{Message: "Internal server error response.", Errors: nil}
+		common := CommonResponse{Message: "Internal server error response.", Errors: []string{}}
 		h.StatusServerError(w, common)
 		return
 	}
 
-	common := CommonResponse{Message: "Create Success.", Errors: nil}
-	h.ResponseJSON(w, common)
+	h.ResponseJSON(w, response)
 }
 
 // NewHTTPHandler responses new HTTPHandler instance.

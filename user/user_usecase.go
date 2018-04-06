@@ -10,7 +10,7 @@ import (
 // UsecaseInterface interface.
 type UsecaseInterface interface {
 	RegisterByDevice(uuid string) (PostRegisterByDeviceResponse, error)
-	Create(request PostCreateRequest) error
+	Create(request PostCreateRequest) (PostCreateRepository, error)
 }
 
 // Usecase struct.
@@ -37,10 +37,11 @@ func (u *Usecase) RegisterByDevice(uuid string) (response PostRegisterByDeviceRe
 }
 
 // Create func.
-func (u *Usecase) Create(request PostCreateRequest) (err error) {
-	err = u.repository.CreateUserApp(request.UUID, request.UserName)
+func (u *Usecase) Create(request PostCreateRequest) (response PostCreateRepository, err error) {
+	response = PostCreateRepository{}
+	response.ID, err = u.repository.CreateUserApp(request.UUID, request.UserName)
 
-	return utils.ErrorsWrap(err, "repository.CreateUser() error")
+	return response, utils.ErrorsWrap(err, "repository.CreateUser() error")
 }
 
 // NewUsecase responses new Usecase instance.

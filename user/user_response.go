@@ -11,3 +11,8 @@ type PostRegisterByDeviceResponse struct {
 	CommonResponse
 	Token string `json:"token"`
 }
+
+// PostCreateRepository struct.
+type PostCreateRepository struct {
+	ID uint64 `json:"id"`
+}
